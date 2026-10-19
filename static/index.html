@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VideoConvert</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="logo">▶ VideoConvert</div>
+      <p>Convierte videos a audio o video MP4</p>
+    </header>
+
+    <section class="panel">
+      <h1>Descarga y convierte</h1>
+      <p class="muted">Pega el enlace de un video autorizado.</p>
+
+      <form id="convertForm">
+        <label for="url">Enlace de YouTube</label>
+        <input
+          id="url"
+          name="url"
+          type="url"
+          placeholder="https://www.youtube.com/watch?v=..."
+          required
+        >
+
+        <label for="formato">Formato de salida</label>
+        <select id="formato" name="formato">
+          <option value="mp3">MP3 — Audio</option>
+          <option value="mp4">MP4 — Video</option>
+        </select>
+
+        <label for="calidad">Calidad</label>
+        <select id="calidad" name="calidad"></select>
+
+        <button id="convertButton" type="submit">
+          Descargar y convertir
+        </button>
+      </form>
+
+      <div id="status" role="status" aria-live="polite"></div>
+      <a id="download" hidden>Descargar resultado</a>
+
+      <p class="notice">
+        Solo para videos propios o con permiso de descarga.
+        La conversión puede tardar según la duración y calidad.
+      </p>
+    </section>
+
+    <footer>VideoConvert · Sin cuentas ni base de datos</footer>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
