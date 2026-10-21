@@ -6,6 +6,8 @@ const button = document.querySelector("#convertButton");
 const status = document.querySelector("#status");
 const download = document.querySelector("#download");
 
+let objectUrl = null;
+
 function updateQualities() {
   const options = format.value === "mp3"
     ? [
@@ -40,6 +42,12 @@ form.addEventListener("submit", async (event) => {
 
   button.disabled = true;
   download.hidden = true;
+
+  // Libera el archivo de la conversión anterior.
+  if (objectUrl) {
+    URL.revokeObjectURL(objectUrl);
+    objectUrl = null;
+  }
   status.textContent =
     "Procesando el video. No cierres esta página…";
 
@@ -54,24 +62,23 @@ form.addEventListener("submit", async (event) => {
 
       try {
         const result = await response.json();
-        message = result.detail || message;
+        // FastAPI devuelve una lista cuando falla la validación.
+        if (typeof result.detail === "string") {
+          message = result.detail;
+        }
       } catch {}
 
       throw new Error(message);
     }
 
     const blob = await response.blob();
-    const objectUrl = URL.createObjectURL(blob);
+    objectUrl = URL.createObjectURL(blob);
 
     download.href = objectUrl;
     download.download = `convertido.${format.value}`;
     download.hidden = false;
     download.textContent = "Descargar archivo convertido";
     status.textContent = "¡Conversión completada!";
-
-    download.onclick = () => {
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
-    };
 
   } catch (error) {
     status.textContent = error.message;
